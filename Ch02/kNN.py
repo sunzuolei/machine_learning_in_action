@@ -9,7 +9,10 @@ Input:      inX: vector to compare to existing dataset (1xN)
             
 Output:     the most popular class label
 
+Modify:     Neko
+
 @author: pbharrin
+
 '''
 from numpy import *
 import operator
@@ -22,9 +25,13 @@ def createDataSet():
     return group, labels
 
 
-group,labels = createDataSet()
-# print group
-# print labels
+# group,labels = createDataSet()
+
+# fig=plt.figure()
+# ax=fig.add_subplot(111)
+# ax.scatter(group[:,0],group[:,1])
+# plt.show()
+
 
 def classify0(inX, dataSet, labels, k):
     dataSetSize = dataSet.shape[0]
@@ -41,15 +48,8 @@ def classify0(inX, dataSet, labels, k):
     # print sortedClassCount
     return sortedClassCount[0][0]
 
-# ********************
-
-# fig=plt.figure()
-# ax=fig.add_subplot(111)
-# ax.scatter(group[:,0],group[:,1])
-# plt.show()
 
 # print (classify0([0,0],group,labels,3))
-
 
 
 
@@ -69,16 +69,14 @@ def file2matrix(filename):
     return returnMat,classLabelVector
 
 
-fig = plt.figure()
-ax = fig.add_subplot(111)
-datingDataMat,datingLabels = file2matrix('datingTestSet2.txt')
-ax.scatter(datingDataMat[:,1], datingDataMat[:,2], 15.0*array(datingLabels), 15.0*array(datingLabels))
-ax.axis([-2,25,-0.2,2.0])
-plt.xlabel('Percentage of Time Spent Playing Video Games')
-plt.ylabel('Liters of Ice Cream Consumed Per Week')
-plt.show()
-
-
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# datingDataMat,datingLabels = file2matrix('datingTestSet2.txt')
+# ax.scatter(datingDataMat[:,1], datingDataMat[:,2], 15.0*array(datingLabels), 15.0*array(datingLabels))
+# ax.axis([-2,25,-0.2,2.0])
+# plt.xlabel('Percentage of Time Spent Playing Video Games')
+# plt.ylabel('Liters of Ice Cream Consumed Per Week')
+# plt.show()
 
     
 def autoNorm(dataSet):
@@ -98,17 +96,15 @@ def datingClassTest():
     # print datingLabels
     normMat, ranges, minVals = autoNorm(datingDataMat)
     # print normMat
-    # print ranges
-    # print minVals
     m = normMat.shape[0]
     numTestVecs = int(m*hoRatio)
     errorCount = 0.0
     for i in range(numTestVecs):
         classifierResult = classify0(normMat[i,:],normMat[numTestVecs:m,:],datingLabels[numTestVecs:m],3)
-        # print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, datingLabels[i])
+        print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, datingLabels[i])
         if (classifierResult != datingLabels[i]): errorCount += 1.0
-    # print "the total error rate is: %f" % (errorCount/float(numTestVecs))
-    # print errorCount
+    print "the total error rate is: %f" % (errorCount/float(numTestVecs))
+    print errorCount
 
 # datingClassTest()
 
@@ -124,40 +120,7 @@ def classifyPerson():
     classifierResult=classify0((inArr-minVals)/ranges,normMat,datingLabels,3)
     print "You will probably like this person:", resultList[classifierResult-1]
 
-# classifyPerson()
+classifyPerson()
 
-# def img2vector(filename):
-#     returnVect = zeros((1,1024))
-#     fr = open(filename)
-#     for i in range(32):
-#         lineStr = fr.readline()
-#         for j in range(32):
-#             returnVect[0,32*i+j] = int(lineStr[j])
-#     return returnVect
-#
-# def handwritingClassTest():
-#     hwLabels = []
-#     trainingFileList = listdir('trainingDigits')           #load the training set
-#     m = len(trainingFileList)
-#     trainingMat = zeros((m,1024))
-#     for i in range(m):
-#         fileNameStr = trainingFileList[i]
-#         fileStr = fileNameStr.split('.')[0]     #take off .txt
-#         classNumStr = int(fileStr.split('_')[0])
-#         hwLabels.append(classNumStr)
-#         trainingMat[i,:] = img2vector('trainingDigits/%s' % fileNameStr)
-#     testFileList = listdir('testDigits')        #iterate through the test set
-#     errorCount = 0.0
-#     mTest = len(testFileList)
-#     for i in range(mTest):
-#         fileNameStr = testFileList[i]
-#         fileStr = fileNameStr.split('.')[0]     #take off .txt
-#         classNumStr = int(fileStr.split('_')[0])
-#         vectorUnderTest = img2vector('testDigits/%s' % fileNameStr)
-#         classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
-#         print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, classNumStr)
-#         if (classifierResult != classNumStr): errorCount += 1.0
-#     print "\nthe total number of errors is: %d" % errorCount
-#     print "\nthe total error rate is: %f" % (errorCount/float(mTest))
 
 
